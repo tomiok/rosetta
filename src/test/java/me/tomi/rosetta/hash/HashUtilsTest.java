@@ -1,5 +1,6 @@
 package me.tomi.rosetta.hash;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 
@@ -21,5 +22,16 @@ public class HashUtilsTest {
     assertNotEquals(hash1.length(), hash256.length());
     assertNotEquals(hash1.length(), hash512.length());
     assertNotEquals(hash256.length(), hash512.length());
+  }
+
+  @Test
+  public void hashMd5() {
+    String s = "hello";
+    String t = "hello world!!, how are u today...?";
+    String md5 = HashUtils.hash(MessageDigestType.MD5, s);
+    String md5_2 = HashUtils.hash(MessageDigestType.MD5, t);
+
+    assertFalse(md5.isEmpty());
+    assertEquals(md5.length(), md5_2.length());
   }
 }
