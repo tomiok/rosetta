@@ -1,5 +1,8 @@
 package me.tomi.rosetta.hash;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+
 import org.junit.Test;
 
 public class HashUtilsTest {
@@ -11,8 +14,12 @@ public class HashUtilsTest {
     String hash256 = HashUtils.hash(MessageDigestType.SHA256, s);
     String hash512 = HashUtils.hash(MessageDigestType.SHA512, s);
 
-    System.out.println("1: " + hash1);
-    System.out.println("256: " + hash256);
-    System.out.println("512: " + hash512);
+    assertFalse(hash1.equalsIgnoreCase(hash256));
+    assertFalse(hash1.equalsIgnoreCase(hash512));
+    assertFalse(hash256.equalsIgnoreCase(hash512));
+
+    assertNotEquals(hash1.length(), hash256.length());
+    assertNotEquals(hash1.length(), hash512.length());
+    assertNotEquals(hash256.length(), hash512.length());
   }
 }
