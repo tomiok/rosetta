@@ -3,9 +3,13 @@ package me.tomi.rosetta.hash;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import me.tomi.rosetta.Strings.StringUtils;
 
@@ -13,17 +17,17 @@ import me.tomi.rosetta.Strings.StringUtils;
  * Utility class with simple hash operations.
  * Supported algs:
  * <ul>
- *   <li>MD5</li>
- *   <li>SHA-1</li>
- *   <li>SHA-256</li>
- *   <li>SHA-512</li>
+ * <li>MD5</li>
+ * <li>SHA-1</li>
+ * <li>SHA-256</li>
+ * <li>SHA-512</li>
  * </ul>
  */
 public final class HashUtils {
 
   private static final Logger log = Logger.getAnonymousLogger();
 
-  private static final int ITERATIONS = 12345;
+  private static final int ITERATIONS = 65000;
 
   private static Optional<MessageDigest> getDigestInstance(MessageDigestType type) {
     try {
