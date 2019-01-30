@@ -1,6 +1,7 @@
 package me.tomi.rosetta.hash;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -65,11 +66,15 @@ public class PBKDFUtils {
     int its = this.iterations != 0 ? iterations : ITERATIONS;
     int key = this.keyLength != 0 ? keyLength : KEY_LENGTH;
 
+    SecureRandom random = new SecureRandom();
+    byte[] r = new byte[salted.length()];
+    random.nextBytes(r);
+
     try {
       SecretKeyFactory skf = SecretKeyFactory.getInstance(PBKDF_KEY);
       PBEKeySpec spec = new PBEKeySpec(
           password.toCharArray(),
-          salted.getBytes(),
+          r,
           its,
           key);
       SecretKey secretKey = skf.generateSecret(spec);
