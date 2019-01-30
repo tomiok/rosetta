@@ -45,6 +45,9 @@ public class PKDFUtilsTest {
   public void verify() {
     String pass = "welcome";
     String hash = PBKDFUtils.password(pass).create();
+    boolean actual = PBKDFUtils.validatePassword(pass, hash).doValidate();
+
     System.out.println(hash);
+    System.out.println(actual);
   }
 }

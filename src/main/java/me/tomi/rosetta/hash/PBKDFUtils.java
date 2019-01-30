@@ -81,33 +81,38 @@ public class PBKDFUtils {
 
   public static PBKDFUtils validatePassword(String password, String goodHash) {
     PBKDFUtils u = new PBKDFUtils();
-
-
+    u.passToValidate = password;
+    u.hashToValidate = goodHash;
     return u;
   }
 
   /**
    * Validates a password using a hash.
    *
-   * @param password the password to check
-   * @param goodHash the hash of the valid password
-   *
    * @return true if the password is correct, false if not
    */
-  public boolean doValidate(String password, String goodHash) {
+  public boolean doValidate() {
 // Decode the hash into its parameters
-    String[] params = goodHash.split(":");
-    int iterations = this.iterations;
-    byte[] salt = fromHex(this.salt);
-    byte[] hash = fromHex(params[2]);
+    int its = this.iterations != 0 ? iterations : ITERATIONS;
+    int key = this.keyLength != 0 ? keyLength : KEY_LENGTH;
+    String salted = this.salt != null ? this.salt : SALT;
+
 // Compute the hash of the provided password, using the same salt,
 // iteration count, and hash len1gth
-    byte[] testHash =
-        PBKDFUtils.password(password).salt(this.salt).iterations(this.iterations).keyLength(keyLength)
-            .create().getBytes();
+    String testHash =
+        PBKDFUtils
+            .password(this.passToValidate)
+            .salt(salted)
+            .iterations(its)
+            .keyLength(key)
+            .create();
+
+
 // Compare the hashes in constant time. The password is correct if
 // both hashes match.
-    return slowEquals(hash, testHash);
+    byte[] actual = fromHex(testHash);
+    byte[] compare = fromHex(hashToValidate);
+    return slowEquals(actual, compare);
   }
 
   /**
