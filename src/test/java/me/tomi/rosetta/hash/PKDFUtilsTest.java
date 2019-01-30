@@ -12,7 +12,7 @@ public class PKDFUtilsTest {
   @Test
   public void create() {
     String pass = "welcome";
-    String hash = PKDFUtils.password(pass).create();
+    String hash = PBKDFUtils.password(pass).create();
 
     assertFalse(hash.isEmpty());
   }
@@ -21,23 +21,30 @@ public class PKDFUtilsTest {
   public void createWithIterations() {
     String pass = "welcome";
     int iterations = 9000;
-    String hash = PKDFUtils.password(pass).iterations(iterations).create();
+    String hash = PBKDFUtils.password(pass).iterations(iterations).create();
 
     assertFalse(hash.isEmpty());
 
-    String withoutIterations = PKDFUtils.password(pass).create();
+    String withoutIterations = PBKDFUtils.password(pass).create();
 
     assertFalse(hash.equalsIgnoreCase(withoutIterations));
     assertEquals(hash.length(), withoutIterations.length());
 
-    String withSalt = PKDFUtils.password(pass).salt("SALTY").create();
+    String withSalt = PBKDFUtils.password(pass).salt("SALTY").create();
 
     assertFalse(withSalt.isEmpty());
     assertEquals(withoutIterations.length(), withSalt.length());
 
-    String withKeyLength = PKDFUtils.password(pass).keyLength(1024).create();
+    String withKeyLength = PBKDFUtils.password(pass).keyLength(1024).create();
 
     assertFalse(withKeyLength.isEmpty());
     assertNotEquals(withKeyLength.length(), hash.length());
+  }
+
+  @Test
+  public void verify() {
+    String pass = "welcome";
+    String hash = PBKDFUtils.password(pass).create();
+    System.out.println(hash);
   }
 }
