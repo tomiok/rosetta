@@ -30,10 +30,10 @@ public class PKDFUtilsTest {
     assertFalse(hash.equalsIgnoreCase(withoutIterations));
     assertEquals(hash.length(), withoutIterations.length());
 
-    String withSalt = PBKDFUtils.password(pass).salt("SALTY").create();
+    String withSalt = PBKDFUtils.password(pass).salt(99).create();
 
     assertFalse(withSalt.isEmpty());
-    assertEquals(withoutIterations.length(), withSalt.length());
+    assertNotEquals(withoutIterations.length(), withSalt.length());
 
     String withKeyLength = PBKDFUtils.password(pass).keyLength(1024).create();
 
@@ -45,9 +45,10 @@ public class PKDFUtilsTest {
   public void verify() {
     String pass = "welcome";
     String hash = PBKDFUtils.password(pass).create();
-    boolean actual = PBKDFUtils.validatePassword(pass, hash).doValidate();
+    boolean actual = PBKDFUtils.validatePassword(pass, hash)
+        .doValidate(PBKDFUtils.DEFAULT_ITERATIONS
+            , PBKDFUtils.DEFAULT_KEY_LENGTH);
 
-    System.out.println(hash);
-    System.out.println(actual);
+    assertTrue(actual);
   }
 }

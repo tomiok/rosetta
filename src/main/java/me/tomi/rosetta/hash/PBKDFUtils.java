@@ -1,31 +1,24 @@
 package me.tomi.rosetta.hash;
 
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.xml.bind.DatatypeConverter;
 
 public class PBKDFUtils {
 
-  private static final String SALT =
-      "TjojSxJZlro64CJISc2vcDJzjHBisf+7owg0eBWgDgtWP7ybSdz/tqV2AelN1F49q3jBD404MWp4Dua3x"
-      + "+8rZsAYSX9A18mz80BAeXB42FUl1cwGbHysCNfI4Ua+KBk392G9UyuOUHDB9kIr3H0TJwzT7LeVinaYhwAzWeOq"
-      + "/QlsUZmZlPsEzjkyvIYlejlOj24jScl7c+iqDlhPP6pysPjFr5DceGaX16Tb44SQ"
-      + "/1rtBGdg0pFWvJY73VQW59zT8Medk3LtQHLJTDw2dOA4LF9bSRX3717sAXT67jbbmih5qmgrKFhP3T6PmjjFapH7GVx"
-      + "+T7HlQIPXX1SeaDXTCPmjJzpLOtb88pibd8pktWxVIEQR+JpH4pJJ8IuKCJZo0hC1"
-      + "/nRmXyPaxKcXHVEhp0PZgL6q9Apb1ivQO3P70FEOP9yMdolLT3w3qokvH/RD9kQdg8MUhJiQymQdnrIcknLVsWsF4qhLzIj"
-      + "/5OO6nRRauiWnnShsmdgYa6D6aMujnadWmGciP8BeAJ5hFnDD5ikgbUyMbFdvCZ3"
-      + "/kdSuAWMiaBp6oiqdpP7RFAEXlnP8K1yDuPGYEQ5DRgXVd82rIhHHPPMg7Ga6EjqNvJ81QDUSt80WE"
-      + "/Q9E2aPXnvXJKA2fgZSwyqiFt6tLRMr03xR0JnaqjolpiU39YmMT8to9ac=";
+  public static final int DEFAULT_SALT = 24;
 
-  private static final int ITERATIONS = 65000;
+  public static final int DEFAULT_ITERATIONS = 65000;
 
-  private static final int KEY_LENGTH = 512;
+  public static final int DEFAULT_KEY_LENGTH = 512;
 
   private static final String PBKDF_KEY = "PBKDF2WithHmacSHA512";
+
+  private static final String COLON = ":";
 
   private String password;
 
@@ -33,11 +26,15 @@ public class PBKDFUtils {
 
   private int keyLength;
 
-  private String salt;
+  private int salt;
 
   private String passToValidate;
 
   private String hashToValidate;
+
+  private boolean isValidation;
+
+  private byte[] saltForValidation;
 
   public static PBKDFUtils password(String password) {
     PBKDFUtils pdkf = new PBKDFUtils();
@@ -55,20 +52,32 @@ public class PBKDFUtils {
     return this;
   }
 
-  public PBKDFUtils salt(String salt) {
+  public PBKDFUtils salt(int salt) {
     this.salt = salt;
+    return this;
+  }
+
+  public PBKDFUtils salt(byte[] salt) {
+    // flag in true
+    this.isValidation = true;
+    this.saltForValidation = salt;
     return this;
   }
 
   public String create() {
 
-    String salted = this.salt != null ? salt : SALT;
-    int its = this.iterations != 0 ? iterations : ITERATIONS;
-    int key = this.keyLength != 0 ? keyLength : KEY_LENGTH;
+    int salted = this.salt != 0 ? salt : DEFAULT_SALT;
+    int its = this.iterations != 0 ? iterations : DEFAULT_ITERATIONS;
+    int key = this.keyLength != 0 ? keyLength : DEFAULT_KEY_LENGTH;
+    byte[] r;
 
-    SecureRandom random = new SecureRandom();
-    byte[] r = new byte[salted.length()];
-    random.nextBytes(r);
+    if (!isValidation) {
+      SecureRandom random = new SecureRandom();
+      r = new byte[salted];
+      random.nextBytes(r);
+    } else {
+      r = this.saltForValidation;
+    }
 
     try {
       SecretKeyFactory skf = SecretKeyFactory.getInstance(PBKDF_KEY);
@@ -78,7 +87,10 @@ public class PBKDFUtils {
           its,
           key);
       SecretKey secretKey = skf.generateSecret(spec);
-      return DatatypeConverter.printHexBinary(secretKey.getEncoded());
+      return toHex(secretKey.getEncoded())
+             + ":"
+             + toHex(r);
+
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new RuntimeException(e);
     }
@@ -96,27 +108,29 @@ public class PBKDFUtils {
    *
    * @return true if the password is correct, false if not
    */
-  public boolean doValidate() {
-// Decode the hash into its parameters
-    int its = this.iterations != 0 ? iterations : ITERATIONS;
-    int key = this.keyLength != 0 ? keyLength : KEY_LENGTH;
-    String salted = this.salt != null ? this.salt : SALT;
+  public boolean doValidate(int iterations, int keyLength) {
+    // Decode the hash into its parameters
+    String[] passWithSaltArray = this.hashToValidate.split(COLON);
+    String hashForValidation = passWithSaltArray[0];
+    String salted = passWithSaltArray[1];
 
-// Compute the hash of the provided password, using the same salt,
-// iteration count, and hash len1gth
+    // Compute the hash of the provided password, using the same salt,
+    // iteration count, and hash length
     String testHash =
         PBKDFUtils
             .password(this.passToValidate)
-            .salt(salted)
-            .iterations(its)
-            .keyLength(key)
+            .salt(fromHex(salted))
+            .iterations(iterations)
+            .keyLength(keyLength)
             .create();
 
+    //split the hash and the salt in different Strings
+    String actualHash = testHash.split(COLON)[0];
 
-// Compare the hashes in constant time. The password is correct if
-// both hashes match.
-    byte[] actual = fromHex(testHash);
-    byte[] compare = fromHex(hashToValidate);
+    // Compare the hashes in constant time. The password is correct if
+    // both hashes match.
+    byte[] actual = fromHex(actualHash);
+    byte[] compare = fromHex(hashForValidation);
     return slowEquals(actual, compare);
   }
 
@@ -144,5 +158,23 @@ public class PBKDFUtils {
       binary[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
     }
     return binary;
+  }
+
+  /**
+   * Converts a byte array into a hexadecimal string.
+   *
+   * @param array the byte array to convert
+   *
+   * @return a length*2 character string encoding the byte array
+   */
+  private static String toHex(byte[] array) {
+    BigInteger bi = new BigInteger(1, array);
+    String hex = bi.toString(16);
+    int paddingLength = (array.length * 2) - hex.length();
+    if (paddingLength > 0) {
+      return String.format("%0" + paddingLength + "d", 0) + hex;
+    } else {
+      return hex;
+    }
   }
 }
