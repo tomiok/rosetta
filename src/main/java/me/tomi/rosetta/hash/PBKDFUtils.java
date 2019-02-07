@@ -8,7 +8,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-public class PBKDFUtils {
+public final class PBKDFUtils {
 
   public static final int DEFAULT_SALT = 24;
 

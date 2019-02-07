@@ -1,6 +1,8 @@
 package me.tomi.rosetta.string.query;
 
-public class QueryBuilder {
+import me.tomi.rosetta.string.StringUtils;
+
+public final class QueryBuilder {
 
   public static final String SELECT = "select";
 
@@ -9,6 +11,8 @@ public class QueryBuilder {
   public static final String DELETE = "delete";
 
   public static final String INSERT = "insert";
+
+  public static final String FROM = "from";
 
   public static final String WHERE = "where";
 
@@ -25,11 +29,37 @@ public class QueryBuilder {
 
   private QueryBuilder() { }
 
-  private static QueryBuilder get() {
+  public static QueryBuilder get() {
     return LazyHolder.INSTANCE;
   }
 
-  
+
+  public QueryBuilder select() {
+    sb
+        .append(SELECT)
+        .append(StringUtils.SPACE);
+    return this;
+  }
+
+  public QueryBuilder all() {
+    sb
+        .append(ALL)
+        .append(StringUtils.SPACE);
+    return this;
+  }
+
+  public QueryBuilder from(final String tableName) {
+    sb
+        .append(FROM)
+        .append(StringUtils.SPACE)
+        .append(tableName);
+    return this;
+  }
+
+  public String create() {
+    return sb.toString();
+  }
+
 
   /*
    *

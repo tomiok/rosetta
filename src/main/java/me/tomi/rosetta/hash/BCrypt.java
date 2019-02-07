@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-public class BCrypt {
+public final class BCrypt {
 
   // BCrypt parameters
   private static final int GENSALT_DEFAULT_LOG2_ROUNDS = 10;
