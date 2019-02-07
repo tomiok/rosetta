@@ -1,5 +1,6 @@
 package me.tomi.rosetta.Strings;
 
+import me.tomi.rosetta.string.StringUtils;
 import org.junit.Test;
 
 public class StringUtilsTest {

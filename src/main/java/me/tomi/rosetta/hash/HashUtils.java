@@ -3,15 +3,11 @@ package me.tomi.rosetta.hash;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import me.tomi.rosetta.Strings.StringUtils;
+import me.tomi.rosetta.string.StringUtils;
 
 /**
  * Utility class with simple hash operations.

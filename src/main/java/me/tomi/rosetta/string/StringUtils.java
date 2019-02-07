@@ -1,4 +1,4 @@
-package me.tomi.rosetta.Strings;
+package me.tomi.rosetta.string;
 
 public final class StringUtils {
 
