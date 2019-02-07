@@ -8,7 +8,7 @@ public final class StringUtils {
 
   public static final String AT = "@";
 
-  public static final String SLASH = "@";
+  public static final String SLASH = "/";
 
   public static final String SPACE = " ";
 
@@ -17,8 +17,7 @@ public final class StringUtils {
       throw new IllegalArgumentException("The argument is null");
     }
 
-    String actual = s.trim();
-    if (actual.isEmpty()) {
+    if (s.trim().isEmpty()) {
       throw new IllegalArgumentException("The argument is blank");
     }
   }
