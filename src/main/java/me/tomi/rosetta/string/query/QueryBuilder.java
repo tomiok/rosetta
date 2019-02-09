@@ -18,6 +18,8 @@ public final class QueryBuilder {
 
   private static final String LIKE = "like";
 
+  private static final String PERCENTAGE = "%";
+
   public static final String ALL = "*";
 
   private static final StringBuffer sb = new StringBuffer();
@@ -54,6 +56,14 @@ public final class QueryBuilder {
         .append(StringUtils.SPACE)
         .append(tableName);
     return this;
+  }
+
+  public QueryBuilder like(final String expression) {
+    sb
+        .append(LIKE)
+        .append(String.format("% %s %", expression));
+
+    return this;† 
   }
 
   public String create() {
