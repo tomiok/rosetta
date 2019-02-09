@@ -1,5 +1,7 @@
 package me.tomi.rosetta.string.query;
 
+import me.tomi.rosetta.string.StringUtils;
+
 public final class QueryBuilder {
 
   private static final String SELECT = "select ";
@@ -30,6 +32,16 @@ public final class QueryBuilder {
   public QueryBuilder select() {
     sb
         .append(SELECT);
+    return this;
+  }
+
+  public QueryBuilder select(final String... columnNames) {
+
+    String s = String.join(StringUtils.COMMA + StringUtils.SPACE, columnNames);
+
+    sb
+        .append(SELECT)
+        .append(s);
     return this;
   }
 

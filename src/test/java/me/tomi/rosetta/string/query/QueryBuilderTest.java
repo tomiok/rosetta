@@ -43,4 +43,17 @@ public class QueryBuilderTest {
 
     assertEquals("update cart set price = 99 where id = 5", s);
   }
+
+  @Test
+  public void testSelectWithMultipleColumns() {
+    String s = QueryBuilder
+        .get()
+        .select("id", "first_name", "last_name")
+        .from("employee")
+        .where("id", isEqualsTo(5))
+        .create();
+
+    assertEquals("select id, first_name, last_name from employee where id = 5", s);
+  }
+
 }

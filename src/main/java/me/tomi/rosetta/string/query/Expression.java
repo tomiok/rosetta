@@ -38,6 +38,11 @@ public final class Expression {
     return new Expression(val, LIKE);
   }
 
+  public static Expression like(final Number target) {
+    String val = String.format("%s%s%s", PERCENTAGE, target, PERCENTAGE);
+    return new Expression(val, LIKE);
+  }
+
   @Override
   public String toString() {
     return StringUtils.SPACE  + exp + StringUtils.SPACE + this.val;
