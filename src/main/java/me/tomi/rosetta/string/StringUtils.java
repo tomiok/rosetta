@@ -12,6 +12,8 @@ public final class StringUtils {
 
   public static final String SPACE = " ";
 
+  public static final String COMMA = ",";
+
   public static void isNullOrBlank(String s) {
     if (s == null) {
       throw new IllegalArgumentException("The argument is null");

@@ -2,7 +2,7 @@ package me.tomi.rosetta.string.query;
 
 public final class QueryBuilder {
 
-  public static final String SELECT = "select ";
+  private static final String SELECT = "select ";
 
   public static final String UPDATE = "update ";
 
@@ -10,15 +10,13 @@ public final class QueryBuilder {
 
   public static final String INSERT = "insert ";
 
-  public static final String FROM = " from ";
+  private static final String FROM = " from ";
 
   private static final String WHERE = " where ";
 
-  private static final String LIKE = " like ";
+  private static final String ALL = "*";
 
-  private static final String PERCENTAGE = "%";
-
-  public static final String ALL = "*";
+  private static final String SET = " set ";
 
   private StringBuffer sb = new StringBuffer();
 
@@ -35,6 +33,18 @@ public final class QueryBuilder {
     return this;
   }
 
+  public QueryBuilder update(final String tableName, final String column, Expression e) {
+
+    sb
+        .append(UPDATE)
+        .append(tableName)
+        .append(SET)
+        .append(column)
+        .append(e);
+
+    return this;
+  }
+
   public QueryBuilder all() {
     sb
         .append(ALL);
@@ -48,20 +58,14 @@ public final class QueryBuilder {
     return this;
   }
 
-  public QueryBuilder where(final String columnName) {
+  public QueryBuilder where(final String columnName, final Expression expression) {
     sb
         .append(WHERE)
-        .append(columnName);
+        .append(columnName)
+        .append(expression);
     return this;
   }
 
-  public QueryBuilder like(final String expression) {
-    sb
-        .append(LIKE)
-        .append(String.format("%s%s%s", "%", expression, "%"));
-
-    return this;
-  }
 
   public String create() {
     return sb.toString();
