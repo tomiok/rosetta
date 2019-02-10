@@ -21,5 +21,6 @@ public class InsertObject {
 
   public static InsertObject val() {
 
+    return new InsertObject(null, null);
   }
 }
