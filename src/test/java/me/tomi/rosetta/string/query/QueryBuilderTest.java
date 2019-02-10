@@ -56,4 +56,14 @@ public class QueryBuilderTest {
     assertEquals("select id, first_name, last_name from employee where id = 5", s);
   }
 
+  @Test
+  public void testDeleteClause() {
+    String s = QueryBuilder
+        .get()
+        .delete("user")
+        .where("id", isEqualsTo(5))
+        .create();
+
+    assertEquals("delete from user where id = 5", s);
+  }
 }

@@ -6,11 +6,11 @@ public final class QueryBuilder {
 
   private static final String SELECT = "select ";
 
-  public static final String UPDATE = "update ";
+  private static final String UPDATE = "update ";
 
-  public static final String DELETE = "delete ";
+  private static final String DELETE = "delete";
 
-  public static final String INSERT = "insert ";
+  private static final String INSERT = "insert into ";
 
   private static final String FROM = " from ";
 
@@ -35,7 +35,7 @@ public final class QueryBuilder {
     return this;
   }
 
-  public QueryBuilder select(final String... columnNames) {
+  public QueryBuilder select(String... columnNames) {
 
     String s = String.join(StringUtils.COMMA + StringUtils.SPACE, columnNames);
 
@@ -45,32 +45,43 @@ public final class QueryBuilder {
     return this;
   }
 
-  public QueryBuilder update(final String tableName, final String column, Expression e) {
-
-    sb
-        .append(UPDATE)
-        .append(tableName)
-        .append(SET)
-        .append(column)
-        .append(e);
-
-    return this;
-  }
-
   public QueryBuilder all() {
     sb
         .append(ALL);
     return this;
   }
 
-  public QueryBuilder from(final String tableName) {
+  public QueryBuilder update(String tableName, String column, Expression e) {
+    sb
+        .append(UPDATE)
+        .append(tableName)
+        .append(SET)
+        .append(column)
+        .append(e);
+    return this;
+  }
+
+  public QueryBuilder delete(String tableName) {
+    sb
+        .append(DELETE)
+        .append(FROM)
+        .append(tableName);
+    return this;
+  }
+
+  public QueryBuilder insert(InsertObject io) {
+
+    return this;
+  }
+
+  public QueryBuilder from(String tableName) {
     sb
         .append(FROM)
         .append(tableName);
     return this;
   }
 
-  public QueryBuilder where(final String columnName, final Expression expression) {
+  public QueryBuilder where(String columnName, Expression expression) {
     sb
         .append(WHERE)
         .append(columnName)
@@ -78,20 +89,7 @@ public final class QueryBuilder {
     return this;
   }
 
-
   public String create() {
     return sb.toString();
   }
-
-
-  /*
-   *
-   *
-   * select().all().from("user");
-   *
-   * select("id", "name").from("user");
-   *
-   * select().all().from("user").where("id", equals(5)).and("name", like("Tom");
-   *
-   */
 }
