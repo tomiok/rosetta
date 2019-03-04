@@ -66,4 +66,14 @@ public class QueryBuilderTest {
 
     assertEquals("delete from user where id = 5", s);
   }
+
+  @Test
+  public void testInsertStatement() {
+    String s = QueryBuilder
+        .get()
+        .insert("user", new InsertObject("name", "tommy"))
+        .create();
+
+    System.out.println(s);
+  }
 }

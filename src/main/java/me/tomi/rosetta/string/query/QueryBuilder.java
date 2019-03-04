@@ -12,6 +12,8 @@ public final class QueryBuilder {
 
   private static final String INSERT = "insert into ";
 
+  private static final String VALUES = "values";
+
   private static final String FROM = " from ";
 
   private static final String WHERE = " where ";
@@ -73,8 +75,16 @@ public final class QueryBuilder {
     sb
         .append(INSERT)
         .append(tableName)
-        .append(StringUtils.SPACE);
-
+        .append(StringUtils.SPACE)
+        .append(StringUtils.LEFT_P)
+        .append(String.join(",", io.getColumns()))
+        .append(StringUtils.RIGHT_P)
+        .append(StringUtils.SPACE)
+        .append(VALUES)
+        .append(StringUtils.SPACE)
+        .append(StringUtils.LEFT_P)
+        .append(String.join(",", io.getValues()))
+        .append(StringUtils.RIGHT_P);
     return this;
   }
 

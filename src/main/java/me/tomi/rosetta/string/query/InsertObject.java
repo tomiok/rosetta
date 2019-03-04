@@ -5,6 +5,7 @@ import java.util.List;
 
 public class InsertObject {
 
+
   private final List<String> columns;
 
   private final List<String> values;
@@ -15,6 +16,10 @@ public class InsertObject {
   }
 
   public InsertObject(List<String> columns, List<String> values) {
+    if (columns.size() != values.size()) {
+      throw new IllegalArgumentException("columns and values have different number of args: "
+                                         + columns.size() + " and " + values.size());
+    }
     this.columns = columns;
     this.values = values;
   }
