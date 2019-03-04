@@ -95,14 +95,14 @@ public final class QueryBuilder {
         .append(tableName)
         .append(StringUtils.SPACE)
         .append(StringUtils.LEFT_P)
-       // .append(String.join(StringUtils.COMMA, io.getColumns()))
+        // .append(String.join(StringUtils.COMMA, io.getColumns()))
         .append(StringUtils.RIGHT_P)
         .append(StringUtils.SPACE)
         .append(VALUES)
         .append(StringUtils.SPACE)
         .append(StringUtils.LEFT_P)
-     //  .append(String.join(StringUtils.COMMA, io.getFlatValues()))
-         .append(StringUtils.RIGHT_P);
+        //  .append(String.join(StringUtils.COMMA, io.getFlatValues()))
+        .append(StringUtils.RIGHT_P);
     return this;
   }
 

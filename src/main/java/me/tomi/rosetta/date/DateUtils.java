@@ -56,8 +56,10 @@ public final class DateUtils {
 
   /**
    * Transform a {@link LocalDate} object with a {@link ZoneOffset} into an {@link Instant} object.
+   *
    * @param localDate {@link LocalDate} object to transform.
-   * @param offset {@link ZoneOffset} to modify the instant.
+   * @param offset    {@link ZoneOffset} to modify the instant.
+   *
    * @return An {@link Instant} object.
    */
   public static Instant from(LocalDate localDate, ZoneOffset offset) {
@@ -66,8 +68,10 @@ public final class DateUtils {
 
   /**
    * Transform a {@link LocalDate} object with a {@link ZoneOffset} into an {@link Instant} object.
+   *
    * @param localDate {@link LocalDate} object to transform.
-   * @param zoneId {@link ZoneId} to modify the local date.
+   * @param zoneId    {@link ZoneId} to modify the local date.
+   *
    * @return An {@link Instant} object.
    */
   public static Instant from(LocalDate localDate, ZoneId zoneId) {

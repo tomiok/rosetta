@@ -45,6 +45,6 @@ public final class Expression {
 
   @Override
   public String toString() {
-    return StringUtils.SPACE  + exp + StringUtils.SPACE + this.val;
+    return StringUtils.SPACE + exp + StringUtils.SPACE + this.val;
   }
 }

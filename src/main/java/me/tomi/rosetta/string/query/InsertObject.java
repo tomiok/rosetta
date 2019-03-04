@@ -35,6 +35,19 @@ public final class InsertObject {
     return new InsertObject(column, value);
   }
 
+  public static InsertObject aggregate(List<InsertObject> insertObjects) {
+    return new InsertObject(
+        insertObjects
+            .stream()
+            .flatMap(insObjs -> insObjs.getColumns().stream())
+            .collect(toList()),
+        insertObjects
+            .stream()
+            .flatMap(insObjs -> insObjs.getValues().stream())
+            .collect(toList())
+    );
+  }
+
   public List<String> getColumns() {
     return Collections.unmodifiableList(columns);
   }
@@ -53,18 +66,5 @@ public final class InsertObject {
           return value;
         })
         .collect(toList());
-  }
-
-  public static InsertObject aggregate(List<InsertObject> insertObjects) {
-    return new InsertObject(
-        insertObjects
-            .stream()
-            .flatMap(insObjs -> insObjs.getColumns().stream())
-            .collect(toList()),
-        insertObjects
-            .stream()
-            .flatMap(insObjs -> insObjs.getValues().stream())
-            .collect(toList())
-    );
   }
 }
