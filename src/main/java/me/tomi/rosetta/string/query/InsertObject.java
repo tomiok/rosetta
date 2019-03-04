@@ -1,26 +1,29 @@
 package me.tomi.rosetta.string.query;
 
+import java.util.Collections;
+import java.util.List;
+
 public class InsertObject {
 
-  private final String columnName;
+  private final List<String> columns;
 
-  private final String value;
+  private final List<String> values;
 
   public InsertObject(final String columnName, final String value) {
-    this.columnName = columnName;
-    this.value = value;
+    this.columns = Collections.singletonList(columnName);
+    this.values = Collections.singletonList(value);
   }
 
-  public String getColumnName() {
-    return columnName;
+  public InsertObject(List<String> columns, List<String> values) {
+    this.columns = columns;
+    this.values = values;
   }
 
-  public String getValue() {
-    return value;
+  public List<String> getColumns() {
+    return Collections.unmodifiableList(columns);
   }
 
-  public static InsertObject val() {
-
-    return new InsertObject(null, null);
+  public List<String> getValues() {
+    return Collections.unmodifiableList(values);
   }
 }

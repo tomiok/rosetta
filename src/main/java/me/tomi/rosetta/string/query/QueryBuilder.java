@@ -69,7 +69,11 @@ public final class QueryBuilder {
     return this;
   }
 
-  public QueryBuilder insert(InsertObject io) {
+  public QueryBuilder insert(String tableName, InsertObject io) {
+    sb
+        .append(INSERT)
+        .append(tableName)
+        .append(StringUtils.SPACE);
 
     return this;
   }
