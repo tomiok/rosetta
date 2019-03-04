@@ -57,7 +57,7 @@ public final class InsertObject {
   }
 
   public List<String> getFlatValues() {
-    return values
+    return Collections.unmodifiableList(values
         .stream()
         .map(value -> {
           if (!StringUtils.isNumeric(value)) {
@@ -65,6 +65,6 @@ public final class InsertObject {
           }
           return value;
         })
-        .collect(toList());
+        .collect(toList()));
   }
 }
