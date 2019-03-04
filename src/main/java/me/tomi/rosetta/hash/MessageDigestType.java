@@ -6,11 +6,11 @@ public enum MessageDigestType {
   SHA256("SHA-256"),
   SHA512("SHA-512");
 
+  private String type;
+
   MessageDigestType(final String type) {
     this.type = type;
   }
-
-  private String type;
 
   public String getType() {
     return type;
