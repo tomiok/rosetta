@@ -20,6 +20,8 @@ public final class StringUtils {
 
   private static final String IS_NUMERIC_REGEX = "[-+]?\\d*\\.?\\d+";
 
+  private static final String WITHE_SPACE_REGEX = "\\s";
+
   public static void validateNullOrBlank(String s) {
     if (s == null) {
       throw new IllegalArgumentException("The argument is null");
@@ -32,5 +34,9 @@ public final class StringUtils {
 
   public static boolean isNumeric(String s) {
     return s.matches(IS_NUMERIC_REGEX);
+  }
+
+  public static String replaceSpaces(String s) {
+    return s.replaceAll(WITHE_SPACE_REGEX, EMPTY);
   }
 }

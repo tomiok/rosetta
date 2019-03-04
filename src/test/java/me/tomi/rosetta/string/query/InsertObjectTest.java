@@ -11,18 +11,56 @@ public class InsertObjectTest {
 
   @Test
   public void of() {
+    InsertObject io = InsertObject.of("name", "tommy");
+
+    assertEquals(io.getValues().size(), 1);
+    assertEquals(io.getColumns().size(), 1);
+    assertEquals(io.getValues().get(0), "tommy");
+    assertEquals(io.getColumns().get(0), "name");
   }
 
   @Test
-  public void getColumns() {
+  public void of_withCsvAndArrays() {
+    InsertObject io = InsertObject.of("first_name, last_name,  age", "tomas", "norris", "30");
+    assertEquals(io.getValues().size(), 3);
+    assertEquals(io.getColumns().size(), 3);
+
+    assertEquals(io.getColumns().get(0), "first_name");
+    assertEquals(io.getColumns().get(1), "last_name");
+    assertEquals(io.getColumns().get(2), "age");
+    assertEquals(io.getValues().get(0), "tomas");
+    assertEquals(io.getValues().get(1), "norris");
+    assertEquals(io.getValues().get(2), "30");
   }
 
   @Test
-  public void getValues() {
+  public void of_withLists() {
+    InsertObject io = InsertObject.of(
+        Arrays.asList("first_name", "last_name", "age"),
+        Arrays.asList("tomas", "norris", "30")
+    );
+
+    assertEquals(io.getValues().size(), 3);
+    assertEquals(io.getColumns().size(), 3);
+
+    assertEquals(io.getColumns().get(0), "first_name");
+    assertEquals(io.getColumns().get(1), "last_name");
+    assertEquals(io.getColumns().get(2), "age");
+    assertEquals(io.getValues().get(0), "tomas");
+    assertEquals(io.getValues().get(1), "norris");
+    assertEquals(io.getValues().get(2), "30");
   }
 
   @Test
   public void getFlatValues() {
+    InsertObject io = InsertObject.of(
+        Arrays.asList("first_name", "last_name", "age"),
+        Arrays.asList("tomas", "norris", "30")
+    );
+    List<String> flatValues = io.getFlatValues();
+    assertEquals(flatValues.get(0), "'tomas'");
+    assertEquals(flatValues.get(1), "'norris'");
+    assertEquals(flatValues.get(2), "30");
   }
 
   @Test
@@ -40,9 +78,5 @@ public class InsertObjectTest {
     assertTrue(io.getValues().contains("tommy"));
     assertTrue(io.getValues().contains("norris"));
     assertTrue(io.getValues().contains("Argentinian"));
-  }
-
-  @Test
-  public void getCsvValues() {
   }
 }

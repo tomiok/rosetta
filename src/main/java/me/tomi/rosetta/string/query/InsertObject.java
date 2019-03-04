@@ -2,6 +2,7 @@ package me.tomi.rosetta.string.query;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import me.tomi.rosetta.string.StringUtils;
@@ -37,6 +38,21 @@ public final class InsertObject {
 
   public static InsertObject of(String column, String value) {
     return new InsertObject(column, value);
+  }
+
+  public static InsertObject of(List<String> columns, List<String> values) {
+    return new InsertObject(columns, values);
+  }
+
+  public static InsertObject of(String csvColumns, List<String> values) {
+    List<String> columns = Arrays.asList(csvColumns.trim().split(StringUtils.COMMA));
+    return new InsertObject(columns, values);
+  }
+
+  public static InsertObject of(String csvColumns, String... arrValues) {
+    List<String> columns = Arrays.asList(StringUtils.replaceSpaces(csvColumns).split(StringUtils.COMMA));
+    List<String> values = Arrays.asList(arrValues);
+    return new InsertObject(columns, values);
   }
 
   public static InsertObject aggregate(List<InsertObject> insertObjects) {
