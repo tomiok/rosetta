@@ -1,5 +1,6 @@
 package me.tomi.rosetta.string.query;
 
+import java.util.List;
 import me.tomi.rosetta.string.StringUtils;
 
 public final class QueryBuilder {
@@ -77,14 +78,31 @@ public final class QueryBuilder {
         .append(tableName)
         .append(StringUtils.SPACE)
         .append(StringUtils.LEFT_P)
-        .append(String.join(",", io.getColumns()))
+        .append(String.join(StringUtils.COMMA, io.getColumns()))
         .append(StringUtils.RIGHT_P)
         .append(StringUtils.SPACE)
         .append(VALUES)
         .append(StringUtils.SPACE)
         .append(StringUtils.LEFT_P)
-        .append(String.join(",", io.getValues()))
+        .append(String.join(StringUtils.COMMA, io.getFlatValues()))
         .append(StringUtils.RIGHT_P);
+    return this;
+  }
+
+  public QueryBuilder insert(String tableName, List<InsertObject> ios) {
+    sb
+        .append(INSERT)
+        .append(tableName)
+        .append(StringUtils.SPACE)
+        .append(StringUtils.LEFT_P)
+       // .append(String.join(StringUtils.COMMA, io.getColumns()))
+        .append(StringUtils.RIGHT_P)
+        .append(StringUtils.SPACE)
+        .append(VALUES)
+        .append(StringUtils.SPACE)
+        .append(StringUtils.LEFT_P)
+     //  .append(String.join(StringUtils.COMMA, io.getFlatValues()))
+         .append(StringUtils.RIGHT_P);
     return this;
   }
 

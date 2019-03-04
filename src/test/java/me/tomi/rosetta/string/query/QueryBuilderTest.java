@@ -74,6 +74,13 @@ public class QueryBuilderTest {
         .insert("user", new InsertObject("name", "tommy"))
         .create();
 
-    System.out.println(s);
+    assertEquals("insert into user (name) values ('tommy')", s);
+  }
+
+  @Test
+  public void testMultiInsert() {
+    String s = QueryBuilder
+        .get()
+        .create();
   }
 }
