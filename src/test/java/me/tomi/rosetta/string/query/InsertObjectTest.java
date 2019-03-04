@@ -9,6 +9,16 @@ import org.junit.Test;
 
 public class InsertObjectTest {
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructor() {
+    new InsertObject("fname,lname", "tomas, norris");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructor_withLists() {
+    new InsertObject(Arrays.asList("fname", "lname "), Arrays.asList("tomas", " norris", "29 "));
+  }
+
   @Test
   public void of() {
     InsertObject io = InsertObject.of("name", "tommy");
@@ -64,7 +74,7 @@ public class InsertObjectTest {
   }
 
   @Test
-  public void getCsvColumns() {
+  public void aggregate() {
     List<InsertObject> objects = Arrays.asList(new InsertObject("first_name", "tommy"),
         new InsertObject("last_name", "norris"), new InsertObject("nationality", "Argentinian"));
     InsertObject io = InsertObject.aggregate(objects);

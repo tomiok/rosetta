@@ -1,6 +1,5 @@
 package me.tomi.rosetta.string.query;
 
-
 import me.tomi.rosetta.string.StringUtils;
 
 public final class Expression {
