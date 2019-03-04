@@ -8,12 +8,12 @@ public class StringUtilsTest {
   @Test(expected = IllegalArgumentException.class)
   public void testBlank() {
     String s = "   ";
-    StringUtils.isNullOrBlank(s);
+    StringUtils.validateNullOrBlank(s);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testNull() {
     String s = null;
-    StringUtils.isNullOrBlank(s);
+    StringUtils.validateNullOrBlank(s);
   }
 }

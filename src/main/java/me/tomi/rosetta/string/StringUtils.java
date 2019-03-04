@@ -14,7 +14,7 @@ public final class StringUtils {
 
   public static final String COMMA = ",";
 
-  public static void isNullOrBlank(String s) {
+  public static void validateNullOrBlank(String s) {
     if (s == null) {
       throw new IllegalArgumentException("The argument is null");
     }
