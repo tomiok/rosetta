@@ -18,6 +18,10 @@ public final class InsertObject {
   }
 
   public InsertObject(final String columnName, final String value) {
+    if (columnName.contains(StringUtils.COMMA)) {
+      throw new IllegalArgumentException("Commas are not allowed to columns in ANSI SQL - If you are trying a "
+                                         + "multi insert, please use Lists!");
+    }
     this.columns = Collections.singletonList(columnName);
     this.values = Collections.singletonList(value);
   }
