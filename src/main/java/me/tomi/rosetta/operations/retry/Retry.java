@@ -1,20 +1,27 @@
 package me.tomi.rosetta.operations.retry;
 
+import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Retry<T, R> {
 
-  public void retry(int times, Runnable runnable,) {
-
+  public static <T, R> Retry<T, R> create() {
+    return new Retry<>();
   }
 
-  public T retry(int times, Callable<T> callable, boolean keepGoing, Waiting waiting) {
+  public Optional<R> withSupplier(int times, Supplier<R> supplier, boolean keepGoing, Waiting waiting) {
+    return retry(times, supplier, keepGoing, waiting);
+  }
+
+  private Optional<R> retry(int times, Supplier<R> supplier, boolean keepGoing, Waiting waiting) {
     for (int i = 0; i < times; i++) {
       try {
         if (i != 0 && waiting.shouldWait) {
           Thread.sleep(waiting.millis);
         }
-        return callable.call();
+        return Optional.of(supplier.get());
       } catch (Exception ex) {
         if (i == times - 1 && !keepGoing) {
           throw new RuntimeException(ex.getMessage());
@@ -22,7 +29,56 @@ public class Retry<T, R> {
       }
     }
 
-    throw new RuntimeException("Callable fails due to unknown error");
+    return Optional.empty();
+  }
+
+  private Optional<R> retry(int times, Function<T, R> function, boolean keepGoing, T t, Waiting waiting) {
+    for (int i = 0; i < times; i++) {
+      try {
+        if (i != 0 && waiting.shouldWait) {
+          Thread.sleep(waiting.millis);
+        }
+        return Optional.of(function.apply(t));
+      } catch (Exception ex) {
+        if (i == times - 1 && !keepGoing) {
+          throw new RuntimeException(ex.getMessage());
+        }
+      }
+    }
+
+    return Optional.empty();
+  }
+
+  private void retry(int times, Runnable runnable, boolean keepGoing, Waiting waiting) {
+    for (int i = 0; i < times; i++) {
+      try {
+        if (i != 0 && waiting.shouldWait) {
+          Thread.sleep(waiting.millis);
+        }
+        runnable.run();
+      } catch (Exception ex) {
+        if (i == times - 1 && !keepGoing) {
+          throw new RuntimeException(ex.getMessage());
+        }
+      }
+    }
+  }
+
+  private Optional<T> retry(int times, Callable<T> callable, boolean keepGoing, Waiting waiting) {
+    for (int i = 0; i < times; i++) {
+      try {
+        if (i != 0 && waiting.shouldWait) {
+          Thread.sleep(waiting.millis);
+        }
+        return Optional.of(callable.call());
+      } catch (Exception ex) {
+        if (i == times - 1 && !keepGoing) {
+          throw new RuntimeException(ex.getMessage());
+        }
+      }
+    }
+
+    return Optional.empty();
   }
 
   public static class Waiting {
