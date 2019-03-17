@@ -4,6 +4,10 @@ import java.util.concurrent.Callable;
 
 public class Retry<T, R> {
 
+  public void retry(int times, Runnable runnable,) {
+
+  }
+
   public T retry(int times, Callable<T> callable, boolean keepGoing, Waiting waiting) {
     for (int i = 0; i < times; i++) {
       try {
@@ -23,8 +27,16 @@ public class Retry<T, R> {
 
   public static class Waiting {
 
-    private long millis;
+    /**
+     * This flag is for the ops if should wait some time untile run the next iteration,
+     * default value is {@code true}
+     */
     private boolean shouldWait;
+
+    /**
+     * This is for how much time the next operation will wait, in milli seconds. Default value is 1 sec.
+     */
+    private long millis;
 
     private Waiting(final long millis, final boolean shouldWait) {
       this.millis = millis;
@@ -32,8 +44,8 @@ public class Retry<T, R> {
     }
 
     private Waiting() {
-      this.millis = 0L;
-      this.shouldWait = false;
+      this.millis = 1_000L;
+      this.shouldWait = true;
     }
 
     public static Waiting create(long millis, boolean shouldWait) {
