@@ -1,13 +1,13 @@
 package me.tomi.rosetta.operations.retry;
 
-import static me.tomi.rosetta.operations.retry.Retry.create;
-
+import java.util.Optional;
 import org.junit.Test;
 
 public class RetryTest {
 
   @Test
   public void withSupplier() {
-    Retry<String, String> r = Retry.create();
+    Optional<Integer> p = Retry.<Integer, Integer>create().withSupplier(
+        1, () -> 9, false, Retry.Waiting.create());
   }
 }
