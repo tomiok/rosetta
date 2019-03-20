@@ -5,6 +5,11 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 import me.tomi.rosetta.operations.Utils;
 
+/**
+ * Retry-able operation with {@link Supplier} or a {@link Callable}
+ *
+ * @param <T> The type to be returned by the supplier or the callable
+ */
 public class UniRetry<T> {
 
   public static <T> UniRetry<T> create() {

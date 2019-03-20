@@ -2,6 +2,9 @@ package me.tomi.rosetta.operations.retry;
 
 import me.tomi.rosetta.operations.Utils;
 
+/**
+ * Retry-able class that accept a {@link Runnable} to do the job.
+ */
 public class Retry {
 
   public static Retry create() {
