@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.SOURCE)
-@Target(value = { ElementType.PARAMETER})
+@Target(value = { ElementType.PARAMETER })
 public @interface NotNull {
 }
