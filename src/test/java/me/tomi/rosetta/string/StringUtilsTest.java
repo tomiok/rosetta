@@ -1,4 +1,4 @@
-package me.tomi.rosetta.Strings;
+package me.tomi.rosetta.string;
 
 import me.tomi.rosetta.string.StringUtils;
 import org.junit.Test;
